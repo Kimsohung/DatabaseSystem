@@ -1,0 +1,311 @@
+CREATE TABLE Brands (
+	id int PRIMARY KEY,
+	name varchar(20),
+	established_date timestamp
+);
+
+CREATE TABLE Models (
+	id int PRIMARY KEY,
+	brand_id int,
+    name varchar(50),
+    release_year int,
+    vehicle_type varchar(50),
+    fuel_type varchar(50),
+    door_type smallint,
+    
+    FOREIGN KEY (brand_id) REFERENCES brands (id)
+);
+
+CREATE TABLE Options (
+	id int PRIMARY KEY,
+	color varchar(20),
+	engine_type varchar(20),
+    transmission_type varchar(20)
+);
+
+CREATE TABLE Vehicles (
+	VIN int PRIMARY KEY,
+	option_id int UNIQUE,
+    model_id int,
+    
+	FOREIGN KEY (option_id) REFERENCES Options (id),
+	FOREIGN KEY (model_id) REFERENCES Models (id)
+);
+
+
+CREATE TABLE Customers (
+	id int PRIMARY KEY,
+	name varchar(20),
+	address varchar(20),
+    phone int,
+    gender varchar(10),
+    annual_income int
+);
+
+CREATE TABLE Dealers (
+	id int PRIMARY KEY,
+	name varchar(20),
+	location varchar(50),
+    phone int
+);
+
+CREATE TABLE Sales (
+	id int PRIMARY KEY,
+
+	customer_id int,
+    dealer_id int,
+    VIN int UNIQUE,
+    
+    price int,
+    purchased_at timestamp,
+    receipt_at timestamp,
+    
+	FOREIGN KEY (customer_id) REFERENCES Customers (id),
+	FOREIGN KEY (dealer_id) REFERENCES Dealers (id),
+	FOREIGN KEY (VIN) REFERENCES Vehicles (VIN)
+);
+
+CREATE TABLE Suppliers (
+	id int PRIMARY KEY,
+	name varchar(20)
+);
+
+CREATE TABLE Supply_from_supplier (
+	id int PRIMARY KEY,
+	model_id int,
+    supplier_id int,
+	supplied_at timestamp,
+    
+    FOREIGN KEY (model_id) REFERENCES Models (id),
+	FOREIGN KEY (supplier_id) REFERENCES Suppliers (id)
+);
+
+CREATE TABLE Manufacturing_plants (
+	id int PRIMARY KEY,
+	plant_type int,
+    location varchar(20),
+	phone int
+);
+
+CREATE TABLE Supply_from_plant (
+	id int PRIMARY KEY,
+	model_id int,
+    plant_id int,
+	supplied_at timestamp,
+    
+	FOREIGN KEY (model_id) REFERENCES Models (id),
+	FOREIGN KEY (plant_id) REFERENCES Manufacturing_plants (id)
+);
+
+insert into Brands values ('1', 'audi', '1981-08-21 00:00:00');
+insert into Brands values ('2', 'bmw', '1981-08-13 00:00:00');
+insert into Brands values ('3', 'daewoo', '1982-07-15 00:00:00');
+insert into Brands values ('4', 'hyundai', '1982-12-24 00:00:00');
+insert into Brands values ('5', 'teslar', '1983-03-22 00:00:00');
+insert into Brands values ('6', 'benz', '1984-06-21 00:00:00');
+insert into Brands values ('7', 'kia', '1984-04-21 00:00:00');
+insert into Brands values ('8', 'socar', '1984-02-03 00:00:00');
+insert into Brands values ('9', 'ferrari', '1983-07-17 00:00:00');
+insert into Brands values ('10', 'lambor', '1982-03-20 00:00:00');
+insert into Brands values ('11', 'pugeot', '1985-08-21 00:00:00');
+insert into Brands values ('12', 'mac', '1984-08-22 00:00:00');
+insert into Brands values ('13', 'pagani', '1982-09-24 00:00:00');
+insert into Brands values ('14', 'porshe', '1981-11-17 00:00:00');
+insert into Brands values ('15', 'rolls', '1981-01-19 00:00:00');
+
+insert into Models values ('1001', '2', 'model_x', '2012', 'convertible', 'lpg', '2');
+insert into Models values ('1002', '11', 'model_y', '2011', 'convertible', 'diesel', '4');
+insert into Models values ('1003', '4', 'model_s', '2009', 'convertible', 'lpg', '4');
+insert into Models values ('1004', '3', 'avante', '2008', 'wegan', 'diesel', '2');
+insert into Models values ('1005', '1', 'maxcruise', '2007', 'convertible', 'lpg', '6');
+insert into Models values ('1006', '7', 'spider', '2006', 'convertible', 'gasoline', '4');
+insert into Models values ('1007', '9', 'g90', '2003', 'convertible', 'wegan', '2');
+insert into Models values ('1008', '10', 'g80', '2004', 'convertible', 'convertible', '2');
+insert into Models values ('1009', '12', 'disco', '2005', 'wegan', 'diesel', '4');
+insert into Models values ('1010', '12', 'tivoli', '2006', 'convertible', 'lpg', '4');
+insert into Models values ('1011', '15', 'r8', '2003', 'convertible', 'diesel', '4');
+insert into Models values ('1012', '14', 'a7', '2009', 'sedan', 'gasoline', '4');
+insert into Models values ('1013', '13', 'sm3', '2003', 'convertible', 'lpg', '4');
+insert into Models values ('1014', '2', 'sm5', '2007', 'convertible', 'gasoline', '4');
+insert into Models values ('1015', '8', 'k9', '2006', 'convertible', 'diesel', '4');
+
+insert into Options values ('1', 'red', 'v6', 'MT');
+insert into Options values ('2', 'black', 'v8', 'AT');
+insert into Options values ('3', 'red', 'v8', 'MT');
+insert into Options values ('4', 'black', 'v6', 'MT');
+insert into Options values ('5', 'yellow', 'v8', 'AT');
+insert into Options values ('6', 'red', 'v12', 'MT');
+insert into Options values ('7', 'yellow', 'v6', 'DCT');
+insert into Options values ('8', 'black', 'v8', 'MT');
+insert into Options values ('9', 'red', 'v6', 'DCT');
+insert into Options values ('10', 'yellow', 'v12', 'MT');
+insert into Options values ('11', 'black', 'v6', 'DCT');
+insert into Options values ('12', 'blue', 'v8', 'MT');
+insert into Options values ('13', 'black', 'v6', 'MT');
+insert into Options values ('14', 'blue', 'v8', 'AT');
+insert into Options values ('15', 'blue', 'v8', 'AT');
+insert into Options values ('16', 'blue', 'v8', 'AT');
+insert into Options values ('17', 'yellow', 'v12', 'MT');
+insert into Options values ('18', 'black', 'v6', 'DCT');
+insert into Options values ('19', 'blue', 'v8', 'MT');
+insert into Options values ('20', 'black', 'v6', 'MT');
+insert into Options values ('21', 'blue', 'v8', 'AT');
+
+
+insert into Vehicles values ('10001', '1', '1003');
+insert into Vehicles values ('10002', '2', '1002');
+insert into Vehicles values ('10003', '3', '1010');
+insert into Vehicles values ('10004', '4', '1010');
+insert into Vehicles values ('10005', '5', '1013');
+insert into Vehicles values ('10006', '6', '1008');
+insert into Vehicles values ('10007', '7', '1006');
+insert into Vehicles values ('10008', '8', '1005');
+insert into Vehicles values ('10009', '9', '1004');
+insert into Vehicles values ('10010', '10', '1013');
+insert into Vehicles values ('10011', '11', '1003');
+insert into Vehicles values ('10012', '12', '1002');
+insert into Vehicles values ('10013', '13', '1004');
+insert into Vehicles values ('10014', '14', '1009');
+insert into Vehicles values ('10015', '15', '1014');
+insert into Vehicles values ('10016', '16', '1013');
+insert into Vehicles values ('10017', '17', '1003');
+insert into Vehicles values ('10018', '18', '1002');
+insert into Vehicles values ('10019', '19', '1004');
+insert into Vehicles values ('10020', '20', '1009');
+insert into Vehicles values ('10021', '21', '1014');
+
+insert into Customers values ('101', 'Kim', 'Newyork', '99547383', 'Male', '900');
+insert into Customers values ('102', 'Mike', 'Bucheon', '34642453', 'Female', '950');
+insert into Customers values ('103', 'James', 'Gangnam', '76458754', 'Male', '1000');
+insert into Customers values ('104', 'Kevin', 'London', '26734574', 'Female', '800');
+insert into Customers values ('105', 'Lucas', 'Paris', '54323432', 'Female', '860');
+insert into Customers values ('106', 'Doncici', 'Paris', '54456457', 'Male', '750');
+insert into Customers values ('107', 'Jordan', 'LA', '87678565', 'Male', '1200');
+insert into Customers values ('108', 'Lee', 'LA', '65437645', 'Female', '580');
+insert into Customers values ('109', 'Jackson', 'Mapo', '76576544', 'Male', '900');
+insert into Customers values ('110', 'Yoon', 'Paris', '76545543', 'Female', '600');
+insert into Customers values ('111', 'Chun', 'Mapo', '23456543', 'Male', '730');
+insert into Customers values ('112', 'Jung', 'LA', '98774567', 'Female', '870');
+insert into Customers values ('113', 'Harden', 'Paris', '34567545', 'Male', '930');
+insert into Customers values ('114', 'Ronaldo', 'Mapo', '34863456', 'Female', '990');
+insert into Customers values ('115', 'Messi', 'Mapo', '87654556', 'Male', '870');
+
+insert into Dealers values ('1', 'Sanwa', 'Seoul', '12345432');
+insert into Dealers values ('2', 'Bigapple', 'London', '45676543');
+insert into Dealers values ('3', 'Baskin', 'Seoul', '56787656');
+insert into Dealers values ('4', 'Robbins', 'Newyork', '87654567');
+insert into Dealers values ('5', 'Killer', 'Newyork', '45676545');
+insert into Dealers values ('6', 'Avengers', 'Newyork', '78856787');
+insert into Dealers values ('7', 'Losio', 'Seoul', '23454323');
+insert into Dealers values ('8', 'Lalsco', 'London', '12343543');
+insert into Dealers values ('9', 'Simlack', 'Newyork', '34567653');
+insert into Dealers values ('10', 'KaKA', 'Newyork', '87453456');
+insert into Dealers values ('11', 'Koisty', 'Seoul', '23467432');
+insert into Dealers values ('12', 'Lubika', 'London', '56787645');
+insert into Dealers values ('13', 'Burly', 'Newyork', '76534525');
+insert into Dealers values ('14', 'Recheck', 'Seoul', '45678765');
+insert into Dealers values ('15', 'Quicksco', 'London', '65457865');
+
+insert into Sales values ('1', '101', '1', '10001', '123', '2018-08-21 00:00:00', '2012-08-07 00:00:00');
+insert into Sales values ('2', '101', '2', '10002', '342', '2018-07-21 00:00:00', '2013-08-21 00:00:00');
+insert into Sales values ('3', '102', '3', '10003', '125', '2019-06-25 00:00:00', '2014-08-04 00:00:00');
+insert into Sales values ('4', '103', '1', '10004', '345', '2020-05-21 00:00:00', '2012-07-21 00:00:00');
+insert into Sales values ('5', '104', '2', '10005', '125', '2021-03-21 00:00:00', '2013-07-21 00:00:00');
+insert into Sales values ('6', '105', '3', '10006', '453', '2021-05-21 00:00:00', '2014-07-21 00:00:00');
+insert into Sales values ('7', '106', '4', '10007', '236', '2019-08-26 00:00:00', '2011-08-21 00:00:00');
+insert into Sales values ('8', '107', '5', '10008', '654', '2018-01-21 00:00:00', '2011-08-23 00:00:00');
+insert into Sales values ('9', '108', '6', '10009', '230', '2018-06-23 00:00:00', '2011-06-21 00:00:00');
+insert into Sales values ('10', '109', '6', '10010', '754', '2019-01-21 00:00:00', '2012-06-21 00:00:00');
+insert into Sales values ('11', '110', '7', '10011', '345', '2020-08-21 00:00:00', '2012-06-21 00:00:00');
+insert into Sales values ('12', '111', '8', '10012', '654', '2021-05-22 00:00:00', '2014-08-23 00:00:00');
+insert into Sales values ('13', '112', '9', '10013', '234', '2019-08-21 00:00:00', '2014-08-21 00:00:00');
+insert into Sales values ('14', '113', '10', '10014', '657', '2018-05-21 00:00:00', '2013-08-24 00:00:00');
+insert into Sales values ('15', '114', '10', '10015', '234', '2018-08-11 00:00:00', '2012-02-21 00:00:00');
+insert into Sales values ('16', '109', '11', '10016', '754', '2019-08-21 00:00:00', '2011-02-27 00:00:00');
+insert into Sales values ('17', '110', '13', '10017', '345', '2020-01-21 00:00:00', '2014-08-21 00:00:00');
+insert into Sales values ('18', '111', '14', '10018', '865', '2021-06-13 00:00:00', '2012-08-28 00:00:00');
+insert into Sales values ('19', '112', '15', '10019', '345', '2019-03-21 00:00:00', '2011-02-28 00:00:00');
+insert into Sales values ('20', '113', '15', '10020', '764', '2021-06-02 00:00:00', '2011-01-30 00:00:00');
+insert into Sales values ('21', '114', '13', '10021', '456', '2020-03-21 00:00:00', '2011-01-22 00:00:00');
+
+insert into Suppliers values ('1', 'Rober');
+insert into Suppliers values ('2', 'Awdf');
+insert into Suppliers values ('3', 'Gfwd');
+insert into Suppliers values ('4', 'Hasd');
+insert into Suppliers values ('5', 'Gwda');
+insert into Suppliers values ('6', 'Hdsd');
+insert into Suppliers values ('7', 'Gasd');
+insert into Suppliers values ('8', 'Hdwd');
+insert into Suppliers values ('9', 'Jfda');
+insert into Suppliers values ('10', 'Hdes');
+insert into Suppliers values ('11', 'Gasw');
+insert into Suppliers values ('12', 'Hefd');
+insert into Suppliers values ('13', 'Yefd');
+insert into Suppliers values ('14', 'Heds');
+insert into Suppliers values ('15', 'Hews');
+
+insert into Supply_from_supplier values ('1', '1001', '1', '2002-01-22 00:00:00');
+insert into Supply_from_supplier values ('2', '1002', '2', '2003-02-23 00:00:00');
+insert into Supply_from_supplier values ('3', '1003', '3', '2003-03-24 00:00:00');
+insert into Supply_from_supplier values ('4', '1004', '4', '2004-04-25 00:00:00');
+insert into Supply_from_supplier values ('5', '1005', '5', '2005-05-26 00:00:00');
+insert into Supply_from_supplier values ('6', '1006', '6', '2006-06-27 00:00:00');
+insert into Supply_from_supplier values ('7', '1007', '7', '2006-07-28 00:00:00');
+insert into Supply_from_supplier values ('8', '1008', '8', '2006-08-29 00:00:00');
+insert into Supply_from_supplier values ('9', '1009', '9', '2007-09-11 00:00:00');
+insert into Supply_from_supplier values ('10', '1010', '10', '2007-10-12 00:00:00');
+insert into Supply_from_supplier values ('11', '1011', '11', '2003-11-13 00:00:00');
+insert into Supply_from_supplier values ('12', '1012', '12', '2006-12-14 00:00:00');
+insert into Supply_from_supplier values ('13', '1013', '13', '2008-01-15 00:00:00');
+insert into Supply_from_supplier values ('14', '1014', '14', '2009-02-16 00:00:00');
+insert into Supply_from_supplier values ('15', '1015', '15', '2007-03-17 00:00:00');
+
+insert into Manufacturing_plants values ('1', '1', 'Newyork', '23454322');
+insert into Manufacturing_plants values ('2', '1', 'Paris', '54312345');
+insert into Manufacturing_plants values ('3', '2', 'Newyork', '34532123');
+insert into Manufacturing_plants values ('4', '2', 'Paris', '87653456');
+insert into Manufacturing_plants values ('5', '1', 'Newyork', '23452345');
+insert into Manufacturing_plants values ('6', '2', 'Paris', '45676545');
+insert into Manufacturing_plants values ('7', '2', 'Paris', '63456744');
+insert into Manufacturing_plants values ('8', '1', 'Newyork', '23456543');
+insert into Manufacturing_plants values ('9', '2', 'London', '33334567');
+insert into Manufacturing_plants values ('10', '2', 'Newyork', '23345432');
+insert into Manufacturing_plants values ('11', '1', 'London', '66543234');
+insert into Manufacturing_plants values ('12', '1', 'Newyork', '23467654');
+insert into Manufacturing_plants values ('13', '2', 'Paris', '87654566');
+insert into Manufacturing_plants values ('14', '1', 'Newyork', '54321234');
+insert into Manufacturing_plants values ('15', '2', 'London', '98842342');
+
+insert into Supply_from_plant values ('1', '1001', '1', '2002-01-22 00:00:00');
+insert into Supply_from_plant values ('2', '1002', '2', '2007-09-11 00:00:00');
+insert into Supply_from_plant values ('3', '1003', '3', '2007-09-11 00:00:00');
+insert into Supply_from_plant values ('4', '1004', '4', '2007-09-11 00:00:00');
+insert into Supply_from_plant values ('5', '1005', '5', '2003-02-23 00:00:00');
+insert into Supply_from_plant values ('6', '1006', '6', '2006-07-28 00:00:00');
+insert into Supply_from_plant values ('7', '1007', '7', '2006-07-28 00:00:00');
+insert into Supply_from_plant values ('8', '1008', '8', '2006-07-28 00:00:00');
+insert into Supply_from_plant values ('9', '1009', '9', '2009-02-16 00:00:00');
+insert into Supply_from_plant values ('10', '1010', '10', '2003-02-23 00:00:00');
+insert into Supply_from_plant values ('11', '1011', '11', '2009-02-16 00:00:00');
+insert into Supply_from_plant values ('12', '1012', '12', '2007-09-11 00:00:00');
+insert into Supply_from_plant values ('13', '1013', '13', '2003-02-23 00:00:00');
+insert into Supply_from_plant values ('14', '1014', '14', '2006-07-28 00:00:00');
+insert into Supply_from_plant values ('15', '1015', '15', '2009-02-16 00:00:00');
+
+create view t as
+	select Brands.id as brand_id, Brands.name, YEAR (Sales.purchased_at) as y, SUM(Sales.price) as total_dollar
+	from Brands, Models, Vehicles, Sales
+	where (Brands.id = Models.brand_id) and (Vehicles.model_id = Models.id) and (Vehicles.VIN = Sales.VIN)
+	group by Brands.id, y
+	order by y, total_dollar DESC;
+
+create view s as
+	select Brands.id as brand_id, Brands.name, YEAR (Sales.purchased_at) as y, COUNT(Vehicles.VIN) as unit_sales
+	from Brands, Models, Vehicles, Sales
+	where (Brands.id = Models.brand_id) and (Vehicles.model_id = Models.id) and (Vehicles.VIN = Sales.VIN)
+	group by YEAR(Sales.purchased_at), Brands.id 
+	order by YEAR(Sales.purchased_at), unit_sales DESC;
+
+
+
+
